@@ -1,0 +1,17 @@
+.mainTable {
+    margin:20px;
+    border-collapse: collapse;
+}
+
+th {
+    font-weight: bold;
+    width: 30px;
+}
+
+table, th, td {
+    border: 1px solid;
+}
+
+td {
+    text-align: center;
+}
