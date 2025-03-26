@@ -1,4 +1,3 @@
-let a = [];
 let arraySize;
 let tableData = [];
 let simplifiedTableData = [];
@@ -8,54 +7,43 @@ let intBytes = 8; // a JavaScript integer uses 8 bytes
 
 let gatheredData = {
     time: { original: 0, simplified: 0, saver: 0 },
-    count: { original: 0, simplified: 0, saver: 0 },
-    saved: { time: 0, memory: "" }
+    count: { original: 0, simplified: 0, saver: 0 }
 };
 
 function FillTable() {
     arraySize = arraySizeText.value * 1;
 
-    SetupArrays();
     OriginalBusinessLogic();
     SimplifiedBusinessLogic();
     MemorySaver();
+    FinishedCalculating();
     CleanUp();
 }
 
 function CleanUp() {
-    a = [];
-
     tableData = [];
     simplifiedTableData = [];
     saverData = [];
     normalizedData = [];
 }
 
-function SetupArrays() {
-    for (let i = 1; i <= arraySize; i++) {
-        a.push(i);
-    }
-}
-
 function OriginalBusinessLogic() {
     let count = 0;
-    let start = Date.now();
+    gatheredData.time.original = Date.now();
 
-    for (let i = 0; i < a.length; i++) {
+    for (let i = 1; i <= arraySize; i++) {
         tableData.push([]);
 
-        for (let j = 0; j < a.length; j++) {
-            tableData[i][j] = a[i] * a[j];
+        for (let j = 1; j <= arraySize; j++) {
+            tableData[i - 1][j - 1] = i * j;
 
             count++;
         }
     }
 
-    let end = Date.now();
-    gatheredData.time.original = end - start;
+    gatheredData.time.original = Date.now() - gatheredData.time.original;
     gatheredData.count.original = count;
 
-    FinishedCalculating();
     TableDisplay(tableSpace, GetOriginalData);
 }
 
@@ -63,11 +51,11 @@ function SimplifiedBusinessLogic() {
     let count = 0;
     gatheredData.time.simplified = Date.now();
 
-    for (let i = 0; i < a.length; i++) {
+    for (let i = 1; i <= arraySize; i++) {
         simplifiedTableData.push([]);
 
-        for (let j = 0; j <= i; j++) {
-            simplifiedTableData[i][j] = a[i] * a[j];
+        for (let j = 1; j <= i; j++) {
+            simplifiedTableData[i - 1][j - 1] = i * j;
 
             count++;
         }
@@ -76,120 +64,111 @@ function SimplifiedBusinessLogic() {
     gatheredData.time.simplified = Date.now() - gatheredData.time.simplified;
     gatheredData.count.simplified = count;
 
-    FinishedCalculating();
     TableDisplay(tableSpace2, GetSimplifiedData);
 }
 
 function MemorySaver() {
     gatheredData.time.saver = Date.now();
 
-    for (let i = 0; i < a.length; i++) {
+    for (let i = 1; i <= arraySize; i++) {
         saverData.push([]);
 
-        for (let j = 0; j <= i; j++) {
-            let data = a[i] * a[j];
+        for (let j = 1; j <= i; j++) {
+            let data = i * j;
             let index = normalizedData.indexOf(data);
 
-            if (index == -1) {
+            if (index === -1) {
                 index = normalizedData.length;
-                normalizedData.push(data);
+                normalizedData.push(data); // this array actually contains the data, while saverData will just get the index of this array as reference
             }
 
-            saverData[i][j] = index; // this would save memory if the data was a string or a complex object
+            saverData[i - 1][j - 1] = index; // this would save memory if the data was a string or a complex object, and if this was a complex object, you may even use a direct memory reference rather than an index
         }
     }
 
     gatheredData.time.saver = Date.now() - gatheredData.time.saver;
     gatheredData.count.saver = normalizedData.length;
 
-    FinishedCalculating();
     TableDisplay(tableSpace3, GetSaverData);
 }
 
 function GetOriginalData(i, j) {
-    return tableData[i][j];
+    return tableData[i - 1][j - 1];
+}
+
+function SwapIndicies(i, j) {
+    return i < j ? [j, i] : [i, j];
 }
 
 function GetSimplifiedData(i, j) {
-    if (i < j) {
-        let temp = i;
-        i = j;
-        j = temp;
-    }
+    [i, j] = SwapIndicies(i, j);
 
-    return simplifiedTableData[i][j];
+    return simplifiedTableData[i - 1][j - 1];
 }
 
 function GetSaverData(i, j) {
-    if (i < j) {
-        let temp = i;
-        i = j;
-        j = temp;
-    }
+    [i, j] = SwapIndicies(i, j);
 
-    return normalizedData[saverData[i][j]];
+    return normalizedData[saverData[i - 1][j - 1]];
+}
+
+function CreateTh(content) {
+    let cell = document.createElement("th");
+    cell.textContent = content;
+    return cell;
 }
 
 function TableDisplay(displayTable, dataMethod) {
     let row = document.createElement("tr");
-    let cell = row.append(document.createElement("th"));
-    let skipRows = [false, false];
+    let skipRows = false;
+    let skipCols = false;
 
+    row.append(document.createElement("th"));
     displayTable.innerHTML = "";
     displayTable.append(row);
 
-    for (let i = 0; i < a.length; i++) {
-        cell = document.createElement("th");
-        cell.textContent = a[i];
-        row.append(cell);
+    for (let i = 1; i <= arraySize; i++) {
+        row.append(CreateTh(i));
 
-        if (arraySize > 20 && i > 8 && !skipRows[0]) {
-            i = a.length - 6;
-            skipRows[0] = true;
+        if (arraySize > 20 && i > 9 && !skipRows) {
+            i = arraySize - 5;
+            skipRows = true;
 
-            cell = document.createElement("th");
-            cell.textContent = "...";
-            row.append(cell);
+            row.append(CreateTh("..."));
         }
     }
-    skipRows[0] = false;
+    skipRows = false;
 
-    for (let i = 0; i < a.length; i++) {
+    for (let i = 1; i <= arraySize; i++) {
         row = document.createElement("tr");
         displayTable.append(row);
 
-        cell = document.createElement("th");
-        cell.textContent = a[i];
-        row.append(cell);
+        row.append(CreateTh(i));
 
-        for (let j = 0; j < a.length; j++) {
-            cell = document.createElement("td");
+        for (let j = 1; j <= arraySize; j++) {
+            let cell = document.createElement("td");
             cell.textContent = dataMethod(i, j);
             row.append(cell);
 
-            if (arraySize > 20 && j > 8 && !skipRows[1]) {
-                j = a.length - 6;
-                skipRows[1] = true;
+            if (arraySize > 20 && j > 9 && !skipCols) {
+                j = arraySize - 5;
+                skipCols = true;
 
-                cell = document.createElement("th");
-                row.append(cell);
+                row.append(document.createElement("th"));
             }
         }
-        skipRows[1] = false;
+        skipCols = false;
 
-        if (arraySize > 20 && i > 8 && !skipRows[0]) {
-            i = a.length - 6;
-            skipRows[0] = true;
+        if (arraySize > 20 && i > 9 && !skipRows) {
+            i = arraySize - 5;
+            skipRows = true;
 
             row = document.createElement("tr");
             displayTable.append(row);
-            cell = document.createElement("th");
-            cell.textContent = "...";
-            row.append(cell);
+            row.append(CreateTh("..."));
 
             for (let j = 0; j < 16; j++) {
-                cell = document.createElement("th");
-                row.append(cell);
+                row.append(document.createElement("th"));
             }
         }
     }
