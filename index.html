@@ -4,7 +4,67 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body onload="FillTable()">
-        <table id="tableSpace" class="mainTable">
+        <label for="arraySizeText">Enter size of array</label><input type="text" id="arraySizeText" value="100"/><button type="button" onclick="FillTable()">Calculate!</button>
+        <br/>
+        <br/>
+        <div class="container">
+            <div class="divs">
+                Original Logic:
+                <table id="tableSpace" class="mainTable">
+                </table>
+            </div>
+            <div class="divs">
+                Simplified Logic:
+                <table id="tableSpace2" class="mainTable">
+                </table>
+            </div>
+            <div class="divs">
+                Memory Saver:
+                <table id="tableSpace3" class="mainTable">
+                </table>
+            </div>
+        </div>
+        <table id="results" class="mainTable">
+            <tr>
+                <th></th>
+                <th>Time (milliseconds)</th>
+                <th>Integer Count</th>
+                <th></th>
+                <th title="If this is negative, it took longer than the baseline.">Time Saved</th>
+                <th>Memory Used</th>
+                <th>Memory Saved</th>
+                <th>Percent Saved</th>
+            </tr>
+            <tr>
+                <td>Original Logic:</td>
+                <td id="originalTime">0</td>
+                <td id="originalCount">0</td>
+                <td>Baseline:</td>
+                <td id="timeSaved0"></td>
+                <td id="memoryUsed0"></td>
+                <td id="memorySaved0">0</td>
+                <td id="memorySavedPercent0">0%</td>
+            </tr>
+            <tr>
+                <td>Simplified Logic:</td>
+                <td id="simplifiedTime">0</td>
+                <td id="simplifiedCount">0</td>
+                <td>Savings:</td>
+                <td id="timeSaved"></td>
+                <td id="memoryUsed1"></td>
+                <td id="memorySaved1"></td>
+                <td id="memorySavedPercent1"></td>
+            </tr>
+            <tr>
+                <td>Memory Saver Logic:</td>
+                <td id="saverTime">0</td>
+                <td id="saverCount">0</td>
+                <td>Savings:</td>
+                <td id="timeSaved2"></td>
+                <td id="memoryUsed2"></td>
+                <td id="memorySaved2"></td>
+                <td id="memorySavedPercent2"></td>
+            </tr>
         </table>
     </body>
 </html>

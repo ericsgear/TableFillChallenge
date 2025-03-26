@@ -1,5 +1,5 @@
 .mainTable {
-    margin:20px;
+    margin:10px;
     border-collapse: collapse;
 }
 
@@ -14,4 +14,15 @@ table, th, td {
 
 td {
     text-align: center;
+}
+
+.container {
+    width:100%;
+}
+
+.divs {
+    display: inline-block;
+    zoom: 1;
+    vertical-align: top;
+    width: 33%;
 }
