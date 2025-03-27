@@ -1,6 +1,6 @@
 # Table Fill Challenge
 ## By Eric Ingamells
-### For Eric's Gear YouTube [video]()
+### For Eric's Gear YouTube [video](https://www.youtube.com/watch?v=w1w2SXRSyEQ)
 
 Thank you for looking at my code. I know it's minimal, but it's good for a reference.
 
