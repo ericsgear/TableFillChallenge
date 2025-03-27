@@ -18,6 +18,7 @@ function FillTable() {
     MemorySaver();
     FinishedCalculating();
     CleanUp();
+    alert("Done.");
 }
 
 function CleanUp() {
